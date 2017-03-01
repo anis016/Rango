@@ -1,0 +1,15 @@
+0. Installed packages
+i) django == 1.10.5
+ii) pillow == 4.0.0
+
+1. URL mappings:
+/ OR /rango/                    --> will point to the main index page
+/rango/about/                   --> will point to the about page
+/rango/category/<category_name> --> will point to the category page for <category_name>
+                                --> categories could be -games, -python, -django etc.
+2. Relationship:
+i) one category will have many pages
+
+3. Models:
+i)  Category: name(CharField), views(IntegerField), likes(IntegerField)
+ii) Page: category(Foreignkey), title(CharField), url(URLField), views(IntegerField)
