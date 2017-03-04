@@ -13,3 +13,10 @@ i) one category will have many pages
 3. Models:
 i)  Category: name(CharField), views(IntegerField), likes(IntegerField)
 ii) Page: category(Foreignkey), title(CharField), url(URLField), views(IntegerField)
+
+4. Migrations:
+a. python manage.py migrate --> For the first time only django related database migrations are done. (Database creation and etc.)
+b. python manage.py makemigrations rango  --> Register any changes in the model of the apps.
+   b.1 python manage.py migrate  --> Commit in the database the changes in the model of the apps.
+
+use point b for any changes in the model

@@ -1,3 +1,8 @@
 /env_mysite/*
 /.idea/*
 *.pyc
+/www/db.sqlite3
+www/rango/__pycache__/
+www/rango/migrations/__pycache__/
+www/www_site/__pycache__/
+credentials.txt
