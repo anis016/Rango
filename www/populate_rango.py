@@ -25,19 +25,49 @@ def populate():
          "url": "http://www.tangowithdjango.com/"}
     ]
 
+    character_pages = [
+        {"title": "Himu",
+         "url": "www.himu.com",
+         "views": 19},
+
+        {"title": "Masud Rana",
+         "url": "www.masudrana.com",
+         "views": 100},
+
+        {"title": "Kishor Pasha",
+         "url": "www.pasha.com",
+         "views": 5502},
+    ]
+
+    novel_pages = [
+        {"title": "Tin Goyenda",
+         "url": "www.tingoyenda.com",
+         "views": 12338},
+
+        {"title": "Sherlock Holmes",
+         "url": "www.sherlock.com",
+         "views": 2313},
+    ]
+
     other_pages = [
         {"title": "Bottle",
          "url": "http://bottlepy.org/docs/dev/"},
         {"title": "Flask",
-         "url": "http://flask.pocoo.org"}]
+         "url": "http://flask.pocoo.org"}
+    ]
 
     ## Category name should be unique
-    categories = {"Python": {"pages": python_pages},
-            "Django": {"pages": django_pages},
-            "Other Frameworks": {"pages": other_pages}}
+    categories = {
+        "Python": {"pages": python_pages, "views": 128, "likes": 64},
+        "Django": {"pages": django_pages, "views": 64, "likes": 32},
+        "Other Frameworks": {"pages": other_pages},
+        "Character": {"pages": character_pages, "views": 100, "likes": 48},  ## name: unique
+        "Novel": {"pages": novel_pages, "views": 528, "likes": 164}
+    }
 
     for category, category_data in categories.items():
-        c = add_category(category)
+        # print("{} - views: {}, likes: {} ".format(category, category_data.get("views", 0), category_data.get("likes", 0)))
+        c = add_category(category, category_data.get("views", 0), category_data.get("likes", 0))
         for p in category_data["pages"]:
             add_page(c, p["title"], p["url"])
 
@@ -45,8 +75,12 @@ def populate():
         for p in Page.objects.filter(category=c):
             print("- {0} - {1}".format(str(c), str(p)))
 
-def add_category(name):
-    c = Category.objects.get_or_create(name=name)[0]
+def add_category(name, views = 0, likes = 0):
+    ## https://docs.djangoproject.com/en/1.10/ref/models/querysets/#get-or-create
+    # Returns a tuple of (object, created), where object is the retrieved or created object and
+    # created is a boolean specifying whether a new object was created.
+    # we are interested only with the object part, hence used [0] to get the 1st part(object)
+    c = Category.objects.get_or_create(name=name, views=views, likes=likes)[0]
     c.save()
     return c
 
