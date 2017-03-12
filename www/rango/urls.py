@@ -6,6 +6,7 @@ urlpatterns = [
     url(r'^$', views.index, name='index'),
     url(r'^index', views.index, name='index'),
     url(r'^about', views.about, name='about'),
+    url(r'^register', views.register, name='register'),
 
     # User of ?P<name>
     # In django, named capturing groups are passed to your view as "KEYWORD ARGUMENTS."
