@@ -1,20 +1,17 @@
-<!DOCTYPE html>
+{% extends 'rango/base.html' %}
+{% load staticfiles %}
 
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>About</title>
-    </head>
-    <body>
-        <div>
-            <br/>
-        </div>
-        <div>
-            <img src="{{ MEDIA_URL }}about.jpg"/>
-        </div>
-        <div>
-            <br/>
-            <p>I am Sayed Anisul Hoque. Enthusiast in Big data ! Apache Spark and love Python.</p>
-        </div>
-    </body>
-</html>
+{% block title_block %}
+    About
+{% endblock %}
+
+{% block body_block %}
+<br/>
+<div>
+    <img src="{{ MEDIA_URL }}about.jpg"/>
+</div>
+<div>
+    <br/>
+    <p>I am Sayed Anisul Hoque. Enthusiast in Big data ! Apache Spark and love Python.</p>
+</div>
+{% endblock %}

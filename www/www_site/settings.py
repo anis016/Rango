@@ -53,7 +53,6 @@ ROOT_URLCONF = 'www_site.urls'
 
 # Templates directory
 TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates')
-
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -133,3 +132,9 @@ MEDIA_ROOT = MEDIA_DIR
 
 # Media files (User uploaded static files example user pictures)
 MEDIA_URL = '/media/'
+
+# Password Hashers
+PASSWORD_HASHERS = (
+    'django.contrib.auth.hashers.PBKDF2PasswordHasher',
+    'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
+)
