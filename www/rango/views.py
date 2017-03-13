@@ -5,6 +5,9 @@ from rango.forms import CategoryForm, PageForm
 from rango.forms import UserForm, UserProfileForm
 from rango.models import UserProfile
 from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login
+from django.http import HttpResponse, HttpResponseRedirect
+from django.core.urlresolvers import reverse
 
 # Create your views here.
 
@@ -118,6 +121,27 @@ def register(request):
     context_dict = {'user_form': user_form, 'profile_form': userprofile_form, 'registered': registered}
     # Render the template depending upon the context
     return render(request, 'rango/register.html', context=context_dict)
+
+def user_login(request):
+    # If request.method == 'POST', try to pull out the relevant information
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        user = authenticate(username=username, password=password) # django's own matchin mechanism
+        if user:
+            if user.is_active:
+                login(request, user) ## django login method
+                print("Login success !")
+                return HttpResponseRedirect(reverse('index'))
+            else:
+                return HttpResponse("Your Account is disabled.")
+        else:
+            print("Invalid login details: {0} {1}".format(username, password))
+            return HttpResponse("Invalid login details supplied.")
+    else:
+        # load the login form for the GET request
+        return render(request, 'rango/login.html')
 
 def about(request):
     return render(request, 'rango/about.html')

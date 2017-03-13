@@ -12,7 +12,11 @@
          alt="Picture of Rango" />
     </div>
     <div>
-        <h1>Rango says... Hey there partner ! <br/></h1>
+        {% if user.is_authenticated %}
+            <h1>Hello {{ user.username }}</h1>
+        {% else %}
+            <h1>Rango says... Hey there partner ! <br/></h1>
+        {% endif %}
     </div>
 </div>
 <div>
