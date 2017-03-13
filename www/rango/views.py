@@ -9,15 +9,43 @@ from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
+from datetime import datetime
 
 # Create your views here.
 
 def index(request):
-    category_list = Category.objects.order_by('-likes')[:10]
+    # request.session.set_test_cookie()
+
+    category_list = Category.objects.order_by('-likes')[:6]
     pages_list = Page.objects.order_by('-views')[:5]
     context_dict = {'categories': category_list}
     context_dict['pages'] = pages_list
-    return render(request, 'rango/index.html', context=context_dict)
+
+    # Obtain response object early so we can add cookie information
+    response = render(request, 'rango/index.html', context=context_dict)
+
+    # call the helper function to handle the cookies
+    visitor_cookie_handler(request, response)
+
+    return response
+
+def visitor_cookie_handler(request, response):
+    # Get the number of visits to the site
+    # We use the COOKIES.get() function to obtain the visits cookie
+    visits = int(request.COOKIES.get('visits', '1'))
+
+    last_visit_cookie = request.COOKIES.get('last_visit', str(datetime.now()))
+    last_visit_time   = datetime.strptime(last_visit_cookie[:-7], '%Y-%m-%d %H:%M:%S')
+
+    if (datetime.now() - last_visit_time).seconds > 2:
+        visits += 1
+        response.set_cookie('last_visit', str(datetime.now()))
+    else:
+        visits = 1
+        response.set_cookie('last_visit', last_visit_cookie)
+
+    response.set_cookie('visits', visits)
+
 
 def show_category(request, category_name_slug):
     context_dict = {}
@@ -152,4 +180,8 @@ def user_logout(request):
     return HttpResponseRedirect(reverse('index'))
 
 def about(request):
+    # if request.session.test_cookie_worked():
+    #     print("TEST COOKiE WORKED !")
+    #     request.session.delete_test_cookie()
+
     return render(request, 'rango/about.html')
