@@ -21,11 +21,21 @@ def index(request):
     context_dict = {'categories': category_list}
     context_dict['pages'] = pages_list
 
+    #### Below code works with checking COOKIE in client side ####
     # Obtain response object early so we can add cookie information
-    response = render(request, 'rango/index.html', context=context_dict)
-
+    # response = render(request, 'rango/index.html', context=context_dict)
     # call the helper function to handle the cookies
-    visitor_cookie_handler(request, response)
+    #visitor_cookie_handler(request, response)
+    ##############################################################
+
+    ### Below code works with checking COOKIE in client side ####
+    # No need to obtain response object early as we are getting the data from server side
+    # call the helper function to handle the cookies
+    visitor_cookie_handler_using_session(request)
+    context_dict['visits'] = request.session['visits']
+
+    response = render(request, 'rango/index.html', context=context_dict)
+    #############################################################
 
     return response
 
@@ -46,6 +56,26 @@ def visitor_cookie_handler(request, response):
 
     response.set_cookie('visits', visits)
 
+
+def get_server_side_cookie(request, cookie, default_val = None):
+    val = request.session.get(cookie)
+    if not val:
+        val = default_val
+    return val
+
+def visitor_cookie_handler_using_session(request):
+    visits = int(get_server_side_cookie(request, 'visits', '1'))
+    last_visit_cookie = get_server_side_cookie(request, 'last_visit', str(datetime.now()))
+    last_visit_time = datetime.strptime(last_visit_cookie[:-7], '%Y-%m-%d %H:%M:%S')
+
+    if (datetime.now() - last_visit_time).seconds > 0:
+        visits += 1
+        request.session['last_visit'] = str(datetime.now())
+    else:
+        visits = 1
+        request.session['last_visit'] = last_visit_cookie
+
+    request.session['visits'] = visits
 
 def show_category(request, category_name_slug):
     context_dict = {}
