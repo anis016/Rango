@@ -10,6 +10,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from datetime import datetime
+from registration.backends.simple.views import RegistrationView
 
 # Create your views here.
 
@@ -139,75 +140,75 @@ def add_page(request, category_name_slug):
     context_dict = {'form': page_form, 'category': category} ## load the form
     return render(request, 'rango/add_page.html', context_dict)
 
-def register(request):
-    # A boolean value to tell whether the registration was successful.
-    registered = False # By default, registration is not successful
+# def register(request):
+#     # A boolean value to tell whether the registration was successful.
+#     registered = False # By default, registration is not successful
+#
+#     if request.method == 'POST':
+#         user_form = UserForm(data=request.POST)
+#         userprofile_form = UserProfileForm(data=request.POST)
+#
+#         if user_form.is_valid() and userprofile_form.is_valid():
+#             # save the user's form data to the database.
+#             # Direct save is possible as it already has password data from form
+#             user = user_form.save()
+#
+#             # hash the provided password using set_password() method
+#             user.set_password(user.password)
+#
+#             # update the user in the database with hashed password
+#             user.save()
+#
+#             ## Now sortout the user_profile form
+#             # We can't directly save the userprofile as we need to provide the user instance else it will
+#             # violate the integrity
+#             profile = userprofile_form.save(commit=False)
+#             profile.user = user
+#             if 'picture' in request.FILES:
+#                 profile.picture = request.FILES['picture']
+#
+#             # Now we can save the userprofile
+#             profile.save()
+#
+#             # Everything done ! Thus change the value of registered to True
+#             registered = True
+#         else:
+#             # print the errors in the Console
+#             print(user_form.errors, userprofile_form.errors)
+#     else:
+#         # Load both the forms for the request.GET method
+#         user_form = UserForm()
+#         userprofile_form = UserProfileForm()
+#
+#     context_dict = {'user_form': user_form, 'profile_form': userprofile_form, 'registered': registered}
+#     # Render the template depending upon the context
+#     return render(request, 'rango/register.html', context=context_dict)
 
-    if request.method == 'POST':
-        user_form = UserForm(data=request.POST)
-        userprofile_form = UserProfileForm(data=request.POST)
+# def user_login(request):
+#     # If request.method == 'POST', try to pull out the relevant information
+#     if request.method == 'POST':
+#         username = request.POST.get('username')
+#         password = request.POST.get('password')
+#
+#         user = authenticate(username=username, password=password) # django's own matchin mechanism
+#         if user:
+#             if user.is_active:
+#                 login(request, user) ## django login method
+#                 print("Login success !")
+#                 return HttpResponseRedirect(reverse('index'))
+#             else:
+#                 return HttpResponse("Your Account is disabled.")
+#         else:
+#             print("Invalid login details: {0} {1}".format(username, password))
+#             return HttpResponse("Invalid login details supplied.")
+#     else:
+#         # load the login form for the GET request
+#         return render(request, 'rango/login.html')
 
-        if user_form.is_valid() and userprofile_form.is_valid():
-            # save the user's form data to the database.
-            # Direct save is possible as it already has password data from form
-            user = user_form.save()
-
-            # hash the provided password using set_password() method
-            user.set_password(user.password)
-
-            # update the user in the database with hashed password
-            user.save()
-
-            ## Now sortout the user_profile form
-            # We can't directly save the userprofile as we need to provide the user instance else it will
-            # violate the integrity
-            profile = userprofile_form.save(commit=False)
-            profile.user = user
-            if 'picture' in request.FILES:
-                profile.picture = request.FILES['picture']
-
-            # Now we can save the userprofile
-            profile.save()
-
-            # Everything done ! Thus change the value of registered to True
-            registered = True
-        else:
-            # print the errors in the Console
-            print(user_form.errors, userprofile_form.errors)
-    else:
-        # Load both the forms for the request.GET method
-        user_form = UserForm()
-        userprofile_form = UserProfileForm()
-
-    context_dict = {'user_form': user_form, 'profile_form': userprofile_form, 'registered': registered}
-    # Render the template depending upon the context
-    return render(request, 'rango/register.html', context=context_dict)
-
-def user_login(request):
-    # If request.method == 'POST', try to pull out the relevant information
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-
-        user = authenticate(username=username, password=password) # django's own matchin mechanism
-        if user:
-            if user.is_active:
-                login(request, user) ## django login method
-                print("Login success !")
-                return HttpResponseRedirect(reverse('index'))
-            else:
-                return HttpResponse("Your Account is disabled.")
-        else:
-            print("Invalid login details: {0} {1}".format(username, password))
-            return HttpResponse("Invalid login details supplied.")
-    else:
-        # load the login form for the GET request
-        return render(request, 'rango/login.html')
-
-@login_required
-def user_logout(request):
-    logout(request)
-    return HttpResponseRedirect(reverse('index'))
+# @login_required
+# def user_logout(request):
+#     logout(request)
+#     return HttpResponseRedirect(reverse('index'))
 
 def about(request):
     # if request.session.test_cookie_worked():
@@ -215,3 +216,10 @@ def about(request):
     #     request.session.delete_test_cookie()
 
     return render(request, 'rango/about.html')
+
+
+class MyRegistrationView(RegistrationView):
+    print("coming here or not !")
+    def get_success_url(self, user=None):
+        print("hitting get_succss_url")
+        return reverse('index')

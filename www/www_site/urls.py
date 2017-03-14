@@ -24,5 +24,29 @@ from django.conf import settings
 urlpatterns = [
     url(r'^$', views.index, name='index'),
     url(r'^rango/', include('rango.urls')),
+    url(r'^accounts/register/$', views.MyRegistrationView.as_view(), name='registration_register'),
+    url(r'^accounts/', include('registration.backends.simple.urls')),
     url(r'^admin/', admin.site.urls),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+## registration.backends.simple.urls mappings
+# registration -> /accounts/register/
+# registration complete -> /accounts/register/complete/
+# login -> /accounts/login/
+# logout -> /accounts/logout/
+# password change -> /password/change/
+# password reset -> /password/reset/
+# activation complete (used in the two-step registration) -> activate/complete/
+# activate (used if the account action fails) -> activate/<activation_key>/
+
+# ^accounts/ ^register/closed/$ [name='registration_disallowed']
+# ^accounts/ ^register/complete/$ [name='registration_complete']
+# ^accounts/ ^register/$ [name='registration_register']
+# ^accounts/ ^login/$ [name='auth_login']
+# ^accounts/ ^logout/$ [name='auth_logout']
+# ^accounts/ ^password/change/$ [name='auth_password_change']
+# ^accounts/ ^password/change/done/$ [name='auth_password_change_done']
+# ^accounts/ ^password/reset/$ [name='auth_password_reset']
+# ^accounts/ ^password/reset/complete/$ [name='auth_password_reset_complete']
+# ^accounts/ ^password/reset/done/$ [name='auth_password_reset_done']
+# ^accounts/ ^password/reset/confirm/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>.+)/$ [name='auth_password_reset_confirm']
