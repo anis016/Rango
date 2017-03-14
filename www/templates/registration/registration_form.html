@@ -2,6 +2,10 @@
 {% load staticfiles %}
 
 {% block body_block %}
-    <h1>Registration Complete</h1>
-    <p>You are now registered !</p>
+    <h1>New Registration</h1>
+    <form method="post" action=".">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Submit">
+    </form>
 {% endblock %}
