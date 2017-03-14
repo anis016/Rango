@@ -2,11 +2,13 @@
 {% load staticfiles %}
 
 {% block title_block %}
-    New Category
+    Add Category
 {% endblock %}
 
 {% block body_block %}
-<h1>Add a Category</h1>
+<div class="jumbotron">
+    <h2 class="display-4">Add a Category</h2>
+</div>
 <div>
     <form id="category_form" method="post" action="{% url 'rango:add_category' %}">
         {% csrf_token %}
@@ -16,12 +18,13 @@
 
         {% for field in form.visible_fields %}
             {{ field.errors }}
-            {{ field.help_text }}
+            <!--{{ field.help_text }}-->
+            {{ field.label_tag }}
             {{ field }}
         {% endfor %}
         <br>
         <br/>
-        <input type="submit" name="submit" value="Create Category"/>
+        <button class="btn btn-primary" type="submit" name="submit">Add Category</button>
     </form>
 </div>
 {% endblock %}

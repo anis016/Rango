@@ -2,11 +2,13 @@
 {% load staticfiles %}
 
 {% block title_block %}
-    New Page
+    Add Page
 {% endblock %}
 
 {% block body_block %}
-<h1>Add a Page</h1>
+<div class="jumbotron">
+    <h2 class="display-4">Add a Page to <a href="{% url 'rango:show_category' category.slug %}">{{ category.name }}</a></h2>
+</div>
 <div>
     <form id="page_form" method="post" action="{% url 'rango:add_page' category.slug %}">
         {% csrf_token %}
@@ -16,12 +18,13 @@
 
         {% for field in form.visible_fields %}
             {{ field.errors }}
-            {{ field.help_text }}
+            <!--{{ field.help_text }}-->
+            {{ field.label_tag }}
             {{ field }}
             <br/>
             <br/>
         {% endfor %}
-        <input type="submit" name="submit" value="Create Page"/>
+        <button class="btn btn-primary" type="submit" name="submit">Add Page</button>
     </form>
 </div>
 {% endblock %}
