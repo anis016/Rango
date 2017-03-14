@@ -17,7 +17,7 @@ from registration.backends.simple.views import RegistrationView
 def index(request):
     # request.session.set_test_cookie()
 
-    category_list = Category.objects.order_by('-likes')[:6]
+    category_list = Category.objects.order_by('-likes')[:5]
     pages_list = Page.objects.order_by('-views')[:5]
     context_dict = {'categories': category_list}
     context_dict['pages'] = pages_list
