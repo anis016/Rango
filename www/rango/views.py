@@ -11,6 +11,7 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from datetime import datetime
 from registration.backends.simple.views import RegistrationView
+from rango.api.webhose import run_query
 
 # Create your views here.
 
@@ -223,3 +224,14 @@ class MyRegistrationView(RegistrationView):
     def get_success_url(self, user=None):
         print("hitting get_succss_url")
         return reverse('index')
+
+
+def webhose_search(request):
+    result_list = []
+    query = ""
+    if request.method == 'POST':
+        query = request.POST['query'].strip()
+        if query:
+            result_list = run_query(query)
+
+    return render(request, 'rango/search.html', {'result_list': result_list, 'query': query})

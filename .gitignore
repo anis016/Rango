@@ -7,3 +7,4 @@ www/rango/migrations/__pycache__/
 www/www_site/__pycache__/
 credentials.txt
 www/rango/migrations/
+www/rango/api/search.key
