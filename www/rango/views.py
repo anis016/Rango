@@ -12,6 +12,7 @@ from django.contrib.auth.decorators import login_required
 from datetime import datetime
 from registration.backends.simple.views import RegistrationView
 from rango.api.webhose import run_query
+from django.shortcuts import redirect
 
 # Create your views here.
 
@@ -83,9 +84,9 @@ def show_category(request, category_name_slug):
     context_dict = {}
     try :
         category = Category.objects.get(slug=category_name_slug)
-        pages = Page.objects.filter(category=category)
+        pages = Page.objects.filter(category=category).order_by('-views')
         context_dict = {'pages': pages, 'category': category}
-        print("context_dict: ", context_dict)
+        # print("context_dict: ", context_dict)
         # context_dict['pages'] = pages
         # context_dict['category'] = category
     except Category.DoesNotExist:
@@ -98,7 +99,8 @@ def show_category(request, category_name_slug):
 def add_category(request):
     form = CategoryForm()
     if request.method == 'GET':
-        print(request.method + " method automatically called")
+        pass
+        # print(request.method + " method automatically called")
 
     if request.method == 'POST':
         form = CategoryForm(request.POST)
@@ -235,3 +237,21 @@ def webhose_search(request):
             result_list = run_query(query)
 
     return render(request, 'rango/search.html', {'result_list': result_list, 'query': query})
+
+def track_url(request):
+    page_id = None
+    url = '/rango/'
+
+    if request.method == 'GET':
+        if 'page_id' in request.GET:
+            page_id = request.GET['page_id']
+
+            try:
+                page = Page.objects.get(id=page_id)
+                page.views = page.views + 1
+                page.save()
+                url = page.url
+            except:
+                print("There is some issue in try block ! debug it out ...")
+
+    return redirect(url)
