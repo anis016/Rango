@@ -7,7 +7,12 @@
 
 {% block body_block %}
     {% if category %}
-            <h1>{{ category.name }}</h1>
+
+            <h2>
+                {{ category.name }}
+            </h2>
+
+            <span><b>{{ category.likes }}</b> people liked this Category</span>
             {% if pages %}
                 <ul>
                     {% for page in pages %}
@@ -29,4 +34,28 @@
     {% else %}
         <strong>The specified category does not exist! </strong>
     {% endif %}
+    <hr/>
+    <form class="form-inline" id="user_form" method="post" action="{% url 'rango:show_category' category.slug %}">
+        {% csrf_token %}
+        <div class="form-group">
+            <input class="form-control" type="text" size="50" name="query" value="{{ query }}" id="query"/>
+        </div>
+        <button class="btn btn-primary" type="submit" name="submit" value="search">Search</button>
+    </form>
+    <br/>
+    <div>
+        {% if result_list %}
+            <h2>Search Results</h2>
+            <div class="list-group">
+                {% for result in result_list %}
+                    <div class="list-group-item">
+                        <h4 class="list-group-item-heading">
+                            <a href="{{ result.link }}">{{ result.title }}</a>
+                        </h4>
+                        <p class="list-group-item-text">{{ result.summary }}</p>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
 {% endblock %}

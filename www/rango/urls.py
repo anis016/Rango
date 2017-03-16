@@ -17,6 +17,6 @@ urlpatterns = [
     url(r'^category/(?P<category_name_slug>[\w\-]+)/$', views.show_category, name='show_category'),
     url(r'^add_category/$', views.add_category, name='add_category'),
     url(r'^category/(?P<category_name_slug>[\w\-]+)/add_page/$', views.add_page, name='add_page'),
-    url(r'^wb_search/$', views.webhose_search, name='webhose_search'),
+    # url(r'^wb_search/$', views.webhose_search, name='webhose_search'), ## we won't do this in 1st step, merged with category
     url(r'^goto/$', views.track_url, name='goto')
 ]

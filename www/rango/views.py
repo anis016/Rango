@@ -80,6 +80,17 @@ def visitor_cookie_handler_using_session(request):
 
     request.session['visits'] = visits
 
+
+def webhose_search(request):
+    result_list = []
+    query = ""
+    if request.method == 'POST':
+        query = request.POST['query'].strip()
+        if query:
+            result_list = run_query(query)
+
+    return render(request, 'rango/search.html', {'result_list': result_list, 'query': query})
+
 def show_category(request, category_name_slug):
     context_dict = {}
     try :
@@ -92,6 +103,16 @@ def show_category(request, category_name_slug):
     except Category.DoesNotExist:
         context_dict['pages'] = None
         context_dict['category'] = None
+
+    ### Merging Webhose search with Category
+    context_dict['query'] = category.name
+    result_list = []
+    if request.method == 'POST':
+        query = request.POST['query'].strip()
+        if query:
+            result_list = run_query(query)
+            context_dict['query'] = query
+            context_dict['result_list'] = result_list
 
     return render(request, 'rango/category.html', context=context_dict)
 
@@ -227,16 +248,6 @@ class MyRegistrationView(RegistrationView):
         print("hitting get_succss_url")
         return reverse('index')
 
-
-def webhose_search(request):
-    result_list = []
-    query = ""
-    if request.method == 'POST':
-        query = request.POST['query'].strip()
-        if query:
-            result_list = run_query(query)
-
-    return render(request, 'rango/search.html', {'result_list': result_list, 'query': query})
 
 def track_url(request):
     page_id = None
