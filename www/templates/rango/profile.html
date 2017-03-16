@@ -13,11 +13,26 @@
         {% if selecteduser.username == user.username %}
             <form method="post" action="." enctype="multipart/form-data">
                 {% csrf_token %}
-                {{ form.as_p }}
+                <div class="form-group">
+                    <label class="btn btn-primary" for="my-file-selector">
+                        <input name="picture" id="my-file-selector" type="file" style="display:none;" onchange="$('#upload-file-info').html($(this).val());">
+                        Update Profile Photo
+                    </label>
+                    <span class='label label-info' id="upload-file-info"></span>
+                    <br/> <br/>
+                    <div class="input-group">
+                      <span class="input-group-addon" id="basic-addon2">Website(https://example.com)</span>
+                      <input type="text" name="website" value="{{ userprofile.website }}" class="form-control" aria-describedby="basic-addon2">
+                    </div>
+
+                </div>
                 <button class="btn btn-primary" type="submit" name="submit">Update</button>
             </form>
         {% else %}
-            <p><strong>Website:</strong> <a href="{{ userprofile.website }}">{{ userprofile.website }}</a></p>
+            <div class="input-group">
+              <span class="input-group-addon" id="basic-addon3">Website(https://example.com)</span>
+              <input type="text" name="website" value="{{ userprofile.website }}" class="form-control" aria-describedby="basic-addon3">
+            </div>
         {% endif %}
     </div>
 {% endblock %}

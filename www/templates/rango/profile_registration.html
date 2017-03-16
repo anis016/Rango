@@ -10,10 +10,24 @@
     <div class="jumbotron">
         <h3 class="display-4">New User Registration - Step 2</h3>
     </div>
+
     <form action="{% url 'rango:register_profile' %}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
 
-        {{ form.as_p}}
+        <div class="form-group">
+            <label class="btn btn-primary" for="my-file-selector">
+                <input name="picture" id="my-file-selector" type="file" style="display:none;" onchange="$('#upload-file-info').html($(this).val());">
+                Upload Profile Photo
+            </label>
+            <span class='label label-info' id="upload-file-info"></span>
+            <br/>
+            <label for="basic-url"></label>
+            <div class="input-group">
+              <span class="input-group-addon" id="basic-addon3">Website(https://example.com)</span>
+              <input type="text" name="website" class="form-control" id="basic-url" aria-describedby="basic-addon3">
+            </div>
+
+        </div>
         <button type="submit" class="btn btn-default">Submit</button>
     </form>
 
