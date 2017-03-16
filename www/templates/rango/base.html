@@ -31,6 +31,7 @@
           <ul class="nav navbar-nav">
             <li class="active"><a href="{% url 'rango:index' %}">Home</a></li>
             <li><a href="{% url 'rango:about' %}">About</a></li>
+            <li><a class="nav-link" href="{% url 'rango:list_profiles' %}">List Profiles</a></li>
             {% if user.is_authenticated %}
                 <li>
                     <a class="nav-link" href="{% url 'rango:add_category' %}">Add a New Category</a>

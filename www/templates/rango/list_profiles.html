@@ -1,0 +1,24 @@
+{% extends 'rango/base.html' %}
+{% load staticfiles %}
+
+{% block title_block %}
+    List Profiles
+{% endblock %}
+
+{% block body_block %}
+    <h1>User Profiles</h1>
+    <ul class="list-group">
+        {% if userprofile_list%}
+            {% for userprofile in userprofile_list %}
+                <li class="list-group-item">
+                    <img src="{{ MEDIA_URL }}{{ userprofile.picture }}" width="150" height="150" alt="{{ selecteduser.username }}"/>
+                    <br/>
+                    UserName: <a href="{% url 'rango:profile' userprofile.user.username %}">{{ userprofile.user.username }}</a>
+                    <br/>
+                    Website: {{ userprofile.website }} </li>
+            {% endfor %}
+        {% else %}
+            <p>There are no users for the site.</p>
+        {% endif %}
+    </ul>
+{% endblock %}

@@ -305,3 +305,11 @@ def profile(request, username):
     print(userprofile.picture)
 
     return render(request, 'rango/profile.html', {'form': form, 'userprofile': userprofile, 'selecteduser': user})
+
+def list_profiles(request):
+    try:
+        userprofile_list = UserProfile.objects.all()
+    except UserProfile.DoesNotExist:
+        return redirect('index')
+
+    return render(request, 'rango/list_profiles.html', {'userprofile_list': userprofile_list})
