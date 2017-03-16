@@ -13,6 +13,8 @@ from datetime import datetime
 from registration.backends.simple.views import RegistrationView
 from rango.api.webhose import run_query
 from django.shortcuts import redirect
+from django.contrib.staticfiles.templatetags.staticfiles import static
+from django.conf import settings
 
 # Create your views here.
 
@@ -273,11 +275,21 @@ def register_profile(request):
 
     if request.method == 'POST':
         form = UserProfileForm(request.POST, request.FILES)
+        ## Here it doesn't work
+        # form_data = form.cleaned_data
+        # print("website: ", form_data['website'])
+
         if form.is_valid():
+            ## If want to access the form data always get it after calling is_valid() method in the below way
+            # form_data = form.cleaned_data
+            # print("website: ", form_data['website'])
+
             user_profile = form.save(commit=False)
             user_profile.user = request.user
-            user_profile.save()
+            if not 'picture' in request.FILES:
+                user_profile.picture = 'profile_images/blank-profile-picture.png'
 
+            user_profile.save()
             return redirect('index')
         else:
             print(form.errors)

@@ -40,7 +40,7 @@
                     <a class="nav-link" href="{% url 'rango:profile' user.username %}">Profile</a>
                 </li>
                 <li>
-                    <a class="nav-link" href="{% url 'auth_logout' %}?next=/rango/"><strong>({{ user.username }})</strong> <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span> </a>
+                    <a class="nav-link" href="{% url 'auth_logout' %}?next=/rango/"><strong>({{ user.username }}) - Logout </a>
                 </li>
             {% else %}
             <li>
