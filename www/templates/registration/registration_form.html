@@ -1,10 +1,14 @@
 {% extends 'rango/base.html' %}
 {% load staticfiles %}
 
+{% block title_block %}
+    Registration - Step 1
+{% endblock %}
+
 {% block body_block %}
 <link href="{% static 'css/signin.css' %}" rel="stylesheet">
 <div class="jumbotron">
-    <h1 class="display-4">New User Registration</h1>
+    <h3 class="display-4">New User Registration - Step 1</h3>
 </div>
 
 <form role="form" method="post" action=".">
@@ -31,6 +35,6 @@
             <span class="helptext">Please enter same password as before, for verification.</span>
         </p>
     </div>
-        <button type="submit" class="btn btn-default">Submit</button>
+    <button type="submit" class="btn btn-default">Submit</button>
 </form>
 {% endblock %}

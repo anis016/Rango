@@ -246,7 +246,7 @@ class MyRegistrationView(RegistrationView):
     print("coming here or not !")
     def get_success_url(self, user=None):
         print("hitting get_succss_url")
-        return reverse('index')
+        return reverse('rango:register_profile')
 
 
 def track_url(request):
@@ -266,3 +266,21 @@ def track_url(request):
                 print("There is some issue in try block ! debug it out ...")
 
     return redirect(url)
+
+
+def register_profile(request):
+    form = UserProfileForm()
+
+    if request.method == 'POST':
+        form = UserProfileForm(request.POST, request.FILES)
+        if form.is_valid():
+            user_profile = form.save(commit=False)
+            user_profile.user = request.user
+            user_profile.save()
+
+            return redirect('index')
+        else:
+            print(form.errors)
+
+    context_dict = {'form': form}
+    return render(request, 'rango/profile_registration.html', context_dict)
